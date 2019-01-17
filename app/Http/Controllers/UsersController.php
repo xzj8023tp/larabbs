@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth',['except'=>[]]);
+    }
+
     //显示个人信息
     public function show(User $user)
     {
@@ -17,11 +22,13 @@ class UsersController extends Controller
     //显示编辑用户资料页面
     public function edit(User $user)
     {
+        $this->authorize('update',$user);
         return view('users.edit',compact('user'));
     }
     //修改动作
     public function update(UserRequest $request,User $user,ImageUploadHandler $uploader)
     {
+        $this->authorize('update',$user);
         $data = $request->all();
 
         if ($request->file('avatar')) {
