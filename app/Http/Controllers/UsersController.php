@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,9 +20,18 @@ class UsersController extends Controller
         return view('users.edit',compact('user'));
     }
     //修改动作
-    public function update(UserRequest $request,User $user)
+    public function update(UserRequest $request,User $user,ImageUploadHandler $uploader)
     {
-        $user->update($request->all());
+        $data = $request->all();
+
+        if ($request->file('avatar')) {
+            $result = $uploader->save($request->avatar, 'avatars', $user->id,400);
+            if ($result) {
+                $data['avatar'] = $result['path'];
+            }
+        }
+
+        $user->update($data);
         return redirect()->route('users.show',$user->id)->with('success','更新个人信息成功');
     }
 }
