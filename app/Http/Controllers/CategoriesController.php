@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 class CategoriesController extends Controller
 {
     //读取分类id关联的话题
-    public function show(Category $category)
+    public function show(Category $category,Request $request,Topic $topic)
     {
-        $topics = Topic::where('category_id',$category->id)->paginate(10);
+        $topics = $topic->withOrder($request->order)
+                        ->where('category_id',$category->id)
+                        ->paginate(10);
         return view('topics.index',compact('topics','category'));
     }
 }
