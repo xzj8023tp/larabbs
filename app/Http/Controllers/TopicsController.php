@@ -40,7 +40,7 @@ class TopicsController extends Controller
 		$topic->fill($request->all());//判断当前参数在不在模型里fillable的设置里
 		$topic->user_id = Auth::id();//获取当前登录用户的id
         $topic->save();
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
+		return redirect()->route('topics.show', $topic->id)->with('success', '创建话题成功');
 	}
 
 	public function edit(Topic $topic)
@@ -54,7 +54,7 @@ class TopicsController extends Controller
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+		return redirect()->route('topics.show', $topic->id)->with('success', '更新话题成功');
 	}
 
 	public function destroy(Topic $topic)
@@ -62,7 +62,7 @@ class TopicsController extends Controller
 		$this->authorize('destroy', $topic);
 		$topic->delete();
 
-		return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
+		return redirect()->route('topics.index')->with('success', '删除成功');
 	}
 	//图片上传
     public function uploadImage(Request $request, ImageUploadHandler $uploader)
